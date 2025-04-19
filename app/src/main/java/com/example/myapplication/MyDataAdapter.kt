@@ -8,12 +8,17 @@ import com.example.myapplication.model.Post
 
 class MyDataAdapter (private val data:List<Post>): RecyclerView.Adapter<MyDataVH>() {
 
+    private val likedState = MutableList(data.size) { false }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyDataVH {
         val layoutInflater = LayoutInflater.from(parent.context)
 
+
         val view: View = layoutInflater.inflate(R.layout.list_item_layout, parent, false)
-        return MyDataVH(view)
+        return MyDataVH(view, parent)
+
+
     }
 
     override fun getItemCount(): Int {
@@ -21,23 +26,26 @@ class MyDataAdapter (private val data:List<Post>): RecyclerView.Adapter<MyDataVH
     }
 
     override fun onBindViewHolder(holder: MyDataVH, position: Int) {
-
         val singleData = data[position]
+        val isLiked = likedState[position]
 
-        var toggle = true
-
+        // Show like count with or without 👍
         holder.tvUsername.text = singleData.userName
         holder.tvDirection.text = singleData.description
-        holder.btnLikes.text = "${singleData.likes}"
+        holder.btnLikes.text = if (isLiked) "${singleData.likes + 1}👍" else "${singleData.likes}"
 
+        // Click listener to toggle like
         holder.btnLikes.setOnClickListener {
-            if (toggle) {
-                holder.btnLikes.text = "${singleData.likes + 1}👍"
-                toggle = false
+            likedState[position] = !likedState[position] // Toggle the state
+
+            val updatedLikes = if (likedState[position]) {
+                singleData.likes + 1
             } else {
-                holder.btnLikes.text = "${singleData.likes}👍"
+                singleData.likes
             }
-                toggle = true
-            }
+
+            holder.btnLikes.text = if (likedState[position]) "$updatedLikes👍" else "${singleData.likes}"
         }
+    }
+
 }

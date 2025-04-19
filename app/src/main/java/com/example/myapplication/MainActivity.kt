@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.model.Post
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         val rvList:RecyclerView = findViewById(R.id.rvList)
-        rvList.layoutManager = LinearLayoutManager(this) // vertical
+        //rvList.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        rvList.layoutManager = GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false)
         val adapter = MyDataAdapter(postsList)
         rvList.adapter = adapter
     }
